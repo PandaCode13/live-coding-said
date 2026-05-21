@@ -3,7 +3,8 @@ FROM node:26-alpine
 WORKDIR /app
 
 COPY package*.json ./
+COPY prisma ./prisma
 
 RUN npm ci
 
-CMD ["npm", "run", "start:dev"]
+CMD ["sh", "-c", "npm run prisma:migrate:prod && npm run start:dev"]
