@@ -34,6 +34,28 @@ services:
     volumes: 
       - .:/app
 
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+
+  prisma-studio:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    
+    ports: 
+      - 5555:51212
+    
+    depends_on:
+      postgres: 
+        condition: service_healthy
+    
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    
+    command: ["npx", "prisma", "studio", "--browser", "none"]
+
+    volumes: 
+      - .:/app
 
 volumes:
   postgres_data:
